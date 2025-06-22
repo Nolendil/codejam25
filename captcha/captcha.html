@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Hanging with our friend crow!</title>
+  <title>Hanging with our crow friend!</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <style type="text/css">
@@ -44,7 +44,7 @@
 
 	#hint {
 		position: absolute;
-		top: 100px;
+		top: 95px;
 		left: 10px;
 		width: 165px;
 		text-align: center;
@@ -79,7 +79,8 @@
 	<div class="debug" style="background-color: gray; width: fit-content;">Wrong: <span id="wrong"></span></div>
 	<div class="debug" style="background-color: gray; width: fit-content;">Correct: <span id="correct"></span></div>
 	<div id="hint">
-		<span id="hint-text"></span>
+		<div id="message-text"></div>
+		<div id="hint-text"></div>
 		<button id="try-again" class="hidden">Try again!</button>
 		<button id="win" class="hidden">You're a human!</button>
 	</div>
@@ -119,6 +120,7 @@
 		const wordLengthElement = document.getElementById("word-length");
 		const wordCountElement = document.getElementById("possible-words");
 		const hintElement = document.getElementById("hint-text");
+		const messageElement = document.getElementById("message-text");
 		const wrongElement = document.getElementById("wrong");
 		const correctElement = document.getElementById("correct");
 		const livesElement = document.getElementById("lives");
@@ -159,6 +161,7 @@
 			wrongLetters = [];
 			correctLetters = [];
 			hintElement.textContent = "Hint: " + getUnicodeChar(0x13000, 0x1342E) + getUnicodeChar(0x1F700, 0x1F773) + getUnicodeChar(0x1F90C, 0x1F9FF);
+			messageElement.innerHTML = "";
 			update();
 		}
 		
@@ -206,11 +209,13 @@
 			if (newAvailableWords.length > 0) {
 				wrongLetters.push(key);
 				document.getElementById("vkey" + key).classList.add("wrong");
+				messageElement.innerHTML = key.toUpperCase() + " was <span class='wrong'>WRONG</span>!";
 				availableWords = newAvailableWords;
 			} else {
 				// We have to accept the letter
 				correctLetters.push(key);
 				document.getElementById("vkey" + key).classList.add("correct");
+				messageElement.innerHTML = key.toUpperCase() + " was <span class='correct'>CORRECT</span>!";
 				// Remove words that don't contain that letter
 				newAvailableWords = [];
 				for (let w of availableWords) {

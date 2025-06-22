@@ -1,6 +1,14 @@
 # Hanging with our crow friend!
 # A pseudo-captcha for the Kitboga's CodeJam 2025
 
+[Try it now!](https://nolendil.github.io/codejam25/)
+
+## Foreword
+
+Try it before reading further, it's more fun if you don't know what's going on.
+
+## What is this? (SPOILERS!)
+
 This is like a Hangman game, except it's **very** unfair.
 The secret word is not chosen at the start. Instead, the game starts with a list of about 500 words and everytime you enter a letter, it tries and discards all words that contains your chosen letter.
 A letter is accepted only when it's present in all the remaining words.

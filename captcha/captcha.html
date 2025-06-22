@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Hangman</title>
+  <title>Hanging with our friend crow!</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <style type="text/css">
@@ -25,9 +25,21 @@
 		display: none;
 	}
 
+	.debug {
+		display: none;
+	}
+
 	#title {
 		width: 100%;
 		text-align: center;
+	}
+
+	#wrong, .wrong {
+		color:darkcyan;
+	}
+
+	#correct, .correct {
+		color: darkviolet;
 	}
 
 	#hint {
@@ -40,10 +52,22 @@
 
 	#lives {
 		position: absolute;
-		top: 250px;
+		top: 200px;
 		left: 45px;
 		width: 300px;
 		text-align: center;
+	}
+
+	#vkeyboard {
+		position: absolute;
+		top: 250px;
+		left: 45px;
+		width: 315px;
+		text-align: center;
+	}
+
+	.vkey {
+		min-width: 24px;
 	}
   </style>
 </head>
@@ -51,14 +75,16 @@
 <body>
   <div id="captcha-container">
     <div id="title">Find the <span id="word-length"></span> letter word...</div>
-	<div>Possible words:<span id="possible-words"></span></div>
-	<div>Wrong: <span id="wrong"></span></div>
-	<div>Correct: <span id="correct"></span></div>
-	<div id="lives"></div>
+	<div class="debug" style="background-color: gray; width: fit-content;">Possible words: <span id="possible-words"></span></div>
+	<div class="debug" style="background-color: gray; width: fit-content;">Wrong: <span id="wrong"></span></div>
+	<div class="debug" style="background-color: gray; width: fit-content;">Correct: <span id="correct"></span></div>
 	<div id="hint">
 		<span id="hint-text"></span>
 		<button id="try-again" class="hidden">Try again!</button>
+		<button id="win" class="hidden">You're a human!</button>
 	</div>
+	<div id="vkeyboard"></div>
+	<div id="lives"></div>
   </div>
 
   <script type="text/javascript" src="4_letter_words.json"></script>
@@ -66,8 +92,19 @@
 
   <script type="text/javascript">
     (function(window, document){
-		let wordLength = 5;
+		/// You can adjust difficulty by modifying the values below:
+		let wordLength = 5; // only 4 or 5
 		let attempts = 4;
+		const attemptMultiplierOnRetry = 1.5;
+		/// Debug
+		const bDebug = false;	//true;
+		if (bDebug) {
+			let debugElements = document.getElementsByClassName("debug");
+			while(debugElements.length > 0) {
+				debugElements[0].classList.remove("debug");
+			}
+		}
+		///
 		let parsedWords = JSON.parse((wordLength === 5) ? words5 : words4);
 		let availableWords = [];
 		{
@@ -85,16 +122,38 @@
 		const wrongElement = document.getElementById("wrong");
 		const correctElement = document.getElementById("correct");
 		const livesElement = document.getElementById("lives");
+		const vkbElement = document.getElementById("vkeyboard");
 		const tryAgainButton = document.getElementById("try-again");
-		tryAgainButton.addEventListener('click', () => reset(true))
+		const winButton = document.getElementById("win");
+		tryAgainButton.addEventListener('click', () => reset(true));
+		winButton.addEventListener('click', () => captchaSuccess());
 		window.onkeyup = onKey;
+		drawVKeyboard();
 		reset(false);
+
+		function drawVKeyboard() {
+			for (let indexLetter = 'a'.charCodeAt(0); indexLetter <= 'z'.charCodeAt(0); indexLetter++) {
+				let newVKeyElement = document.createElement("button");
+				let strLetter = String.fromCharCode(indexLetter);
+				newVKeyElement.textContent = strLetter.toUpperCase();
+				newVKeyElement.classList.add("vkey");
+				newVKeyElement.id = "vkey" + strLetter;
+				let eKey = new Event('keyup');
+				eKey.key = strLetter;
+				newVKeyElement.addEventListener('click', () => onKey(eKey));
+				vkbElement.appendChild(newVKeyElement);
+			}
+		}
 
 		function reset(bRetry) {
 			if (bRetry) {
-				attempts = Math.min(Math.floor(attempts * 1.5), 26);
+				attempts = Math.min(Math.floor(attempts * attemptMultiplierOnRetry), 26);
 			}
 			tryAgainButton.classList.add("hidden");
+			winButton.classList.add("hidden");
+			for (let keyElement of vkbElement.children) {
+				keyElement.classList.remove("wrong", "correct");
+			}
 			availableWords = Array.from(parsedWords);
 			wordLengthElement.textContent = wordLength;
 			wrongLetters = [];
@@ -146,10 +205,12 @@
 			}
 			if (newAvailableWords.length > 0) {
 				wrongLetters.push(key);
+				document.getElementById("vkey" + key).classList.add("wrong");
 				availableWords = newAvailableWords;
 			} else {
 				// We have to accept the letter
 				correctLetters.push(key);
+				document.getElementById("vkey" + key).classList.add("correct");
 				// Remove words that don't contain that letter
 				newAvailableWords = [];
 				for (let w of availableWords) {
@@ -196,7 +257,7 @@
 		function win() {
 			update();
 			hintElement.innerHTML = "SUCCESS!<br>The word was: " + availableWords[0];
-			captchaSuccess();
+			winButton.classList.remove("hidden");
 		}
 
 		function lose() {

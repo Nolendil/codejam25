@@ -17,7 +17,7 @@ Entering a wrong letter makes you lose a life. Lose all lives and it's game over
 
 This is like a Hangman game, except it's **very** unfair.
 The secret word is not chosen at the start. Instead, the game starts with a list of about 500 words and everytime you enter a letter, it tries and discards all words that contains your chosen letter.
-A letter is accepted only when it's present in all the remaining words.
+A letter is accepted either if it's present in all the remaining words, or it might happen randomly.
 It's most likely impossible to win with less than 8 lives for a 5 letter word.
 You can try and start with "E-T-A-O-I-N", the most common English letters, to reduce the pool of candidate words fast.
 However, the fastest way to pass the test is probably to spam inputs and retry until you eventually win.
@@ -28,6 +28,7 @@ Also, your helpful crow friend gives you a usefull hint... composed of random un
 - The length of the secret word can be chosen by setting the variable `wordLength` between 4 and 9 (i.e. ranges that have enough candidate words in the provided word list). Games using longer words should be *easier* since candidate words are more likely to be eliminated on each attempt.
 - Number of starting lives can be adjusted with the `attempts` variable.
 - How many extra lives you get at each attempt can be adjusted with the `attemptMultiplierOnRetry` variable.
+- `chanceToAcceptLetter` allows accepting entered letters randomly to mix things up. It should be in a 0.0-1.0 range. The chance is divided by the rank of the current letter (i.e. if we set the chance to 0.3, the first letter has 30% of being accepted, the second has 15%, the third has 10%, etc). The final letter and impossible letters never get accepted by luck. A value too high might make the challenge trivial but an average one should make the mechanics more confusing.
 
 ## Debugging
 Change the `bDebug` variable to display/hide some debug information:
@@ -37,8 +38,8 @@ Change the `bDebug` variable to display/hide some debug information:
 ## Possible future improvements:
 - ✅ Add feedback in the crow bubble about the letter being wrong or correct.
 - ✅ Switching to use a Public Domain word list.
-- Add a random chance that a letter is accepted, to make the mechanics more confusing.
-- Redraw the background to have bigger speech bubble (or leave it like that because it's janky?)
+- ✅ Add a random chance that a letter is accepted, to make the mechanics more confusing.
+- 🚧 Redraw the background to fit all the texts in the speech bubble
 - Spawn flying beans that the user need to click for a "super" bonus. E.g.
   - do nothing
   - give an extra life
@@ -49,9 +50,9 @@ Change the `bDebug` variable to display/hide some debug information:
 - The crow image was edited from this [CC0 Public Domain photo](https://www.publicdomainpictures.net/en/view-image.php?image=300612) taken by [Circe Denyer](https://linktr.ee/circod).
 - The list of words is from [Michael Wehar](https://github.com/MichaelWehar/Public-Domain-Word-Lists/blob/master/5000-more-common.txt)and is **Public Domain**. It contains a list of 5000 common words including a good number of 4 to 9 letter words and it seems SFW (one word had a dash in it and was removed, though).
 
+---
 
-
-# Original ReadMe below:
+**Original ReadMe below**
 
 ---
 

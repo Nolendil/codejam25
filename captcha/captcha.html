@@ -16,7 +16,7 @@
 
     #captcha-container {
       background: white;
-	  background-image: url("bg.png");
+	  background-image: url("bg0.png");
       width: 390px;
       height: 300px;
     }
@@ -97,8 +97,9 @@
 		let wordLength = 5; // Will be forced to be in the 4-9 range
 		let attempts = 4;
 		const attemptMultiplierOnRetry = 1.5;
+		const chanceToAcceptLetter = 0.25;
 		/// Debug
-		const bDebug = false;	//true;
+		const bDebug = false;
 		if (bDebug) {
 			let debugElements = document.getElementsByClassName("debug");
 			while(debugElements.length > 0) {
@@ -201,38 +202,31 @@
 				return;
 			}
 
-			// Eliminate words that contains that letter if possible
-			let newAvailableWords = [];
-			for (let w of availableWords) {
-				if (!w.includes(key))
-				{
-					newAvailableWords.push(w);
-				}
-			}
-			if (newAvailableWords.length > 0) {
-				wrongLetters.push(key);
-				document.getElementById("vkey" + key).classList.add("wrong");
-				messageElement.innerHTML = key.toUpperCase() + " was <span class='wrong'>WRONG</span>!";
-				availableWords = newAvailableWords;
+			if (isLucky(key)) {
+				acceptLetter(key);
 			} else {
-				// We have to accept the letter
-				correctLetters.push(key);
-				document.getElementById("vkey" + key).classList.add("correct");
-				messageElement.innerHTML = key.toUpperCase() + " was <span class='correct'>CORRECT</span>!";
-				// Remove words that don't contain that letter
-				newAvailableWords = [];
+				// Eliminate words that contains that letter if possible
+				let newAvailableWords = [];
 				for (let w of availableWords) {
-					if (w.includes(key)) {
+					if (!w.includes(key))
+					{
 						newAvailableWords.push(w);
 					}
 				}
+				// Check if it worked. If so, mark that letter as wrong.
 				if (newAvailableWords.length > 0) {
+					wrongLetters.push(key);
+					document.getElementById("vkey" + key).classList.add("wrong");
+					messageElement.innerHTML = key.toUpperCase() + " was <span class='wrong'>WRONG</span>!";
 					availableWords = newAvailableWords;
 				} else {
-					// Oops, this shouldn't happen, right? If it does, free success!
-					console.log("Secret ending, congrats!");
-					win();
-					return;
+					// We couldn't discard the letter, we HAVE to accept it
+					if (!acceptLetter(key)) {
+						// Oops, it failed. This shouldn't happen but, if it does, free success!
+						console.log("Secret ending, congrats!");
+						win();
+						return;
+					}
 				}
 			}
 			
@@ -260,6 +254,47 @@
 			}
 
 			update();
+		}
+		
+		function isLucky(_key) {
+			// No random luck on final letter
+			let currentLetter = correctLetters.length + 1;
+			if (currentLetter >= wordLength) {
+				return false;
+			}
+			// Check luck
+			if (Math.random() >= (chanceToAcceptLetter / currentLetter)) {
+				return false;
+			}
+			// Check if it's possible
+			for (let w of availableWords) {
+				if (w.includes(_key)) {
+					return true;
+				}
+			}
+			// Impossible to accept
+			return false;
+		}
+
+		function acceptLetter(_key) {
+			// We have to accept the letter
+			correctLetters.push(_key);
+			document.getElementById("vkey" + _key).classList.add("correct");
+			messageElement.innerHTML = _key.toUpperCase() + " was <span class='correct'>CORRECT</span>!";
+			// Remove words that don't contain that letter
+			newAvailableWords = [];
+			for (let w of availableWords) {
+				if (w.includes(_key)) {
+					newAvailableWords.push(w);
+				}
+			}
+			if (newAvailableWords.length > 0) {
+				availableWords = newAvailableWords;
+				return true;
+			}
+
+			// Something went wrong
+			return false;
 		}
 
 		function win() {

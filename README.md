@@ -35,6 +35,7 @@ Change the `bDebug` variable to display/hide some debug information:
 - Correct and wrong letters entered in order
 
 ## Possible future improvements:
+- [WIP] Switching to use the Public Domain word list from [MichaelWehar](https://github.com/MichaelWehar/Public-Domain-Word-Lists/blob/master/5000-more-common.txt), it has a good number of 4+ letter words and seems SFW.
 - Add a random chance that a letter is accepted, to make the mechanics more confusing.
 - ~~Add feedback in the crow bubble about the letter being wrong or correct.~~
 - Redraw the background to have bigger speech bubble (or leave it like that because it's janky?)

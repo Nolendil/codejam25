@@ -10,7 +10,7 @@ Try it before reading further, it's more fun if you don't know what's going on.
 ## How to ~~play~~ pass the totally legit human test
 Try letters and guess the secret word!
 Entering letters can be done by using a keyboard or, if you're on a phone, by clicking the virtual keyboard (which is conveniently ordered in alphabetical order, as it should 😁).
-Wrong letters are displayed in cyan on the keyboard, correct ones appear violet, to shake up the classical red/green convention.
+Wrong letters are displayed in green on the keyboard, correct ones appear red, to shake up the traditional conventions.
 Entering a wrong letter makes you lose a life. Lose all lives and it's game over. But don't feel bad, you can always try again. We'll even give you more lives, up to 26 to make sure you will eventually succeed and feel good about yourself.
 
 ## What is going on? (SPOILERS!)

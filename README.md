@@ -35,11 +35,15 @@ Change the `bDebug` variable to display/hide some debug information:
 - Correct and wrong letters entered in order
 
 ## Possible future improvements:
-- [WIP] Switching to use the Public Domain word list from [MichaelWehar](https://github.com/MichaelWehar/Public-Domain-Word-Lists/blob/master/5000-more-common.txt), it has a good number of 4+ letter words and seems SFW.
+- ✅ ~~Add feedback in the crow bubble about the letter being wrong or correct.~~
+- 🚧 Switching to use the Public Domain word list from [MichaelWehar](https://github.com/MichaelWehar/Public-Domain-Word-Lists/blob/master/5000-more-common.txt), it has a good number of 4+ letter words and seems SFW.
 - Add a random chance that a letter is accepted, to make the mechanics more confusing.
-- ~~Add feedback in the crow bubble about the letter being wrong or correct.~~
 - Redraw the background to have bigger speech bubble (or leave it like that because it's janky?)
-- Spawn flying beans that the user need to click for a "super" bonus (e.g. do nothing, give an extra life, make the crow eyes glow...)
+- Spawn flying beans that the user need to click for a "super" bonus. E.g.
+  - do nothing
+  - give an extra life
+  - make the crow eyes glow
+  - increase chances of accepting a letter...
 
 ## Credits
 - The crow image was edited from this [CC0 Public Domain photo](https://www.publicdomainpictures.net/en/view-image.php?image=300612) taken by [Circe Denyer](https://linktr.ee/circod).

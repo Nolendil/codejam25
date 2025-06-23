@@ -18,14 +18,14 @@ Entering a wrong letter makes you lose a life. Lose all lives and it's game over
 This is like a Hangman game, except it's **very** unfair.
 The secret word is not chosen at the start. Instead, the game starts with a list of about 500 words and everytime you enter a letter, it tries and discards all words that contains your chosen letter.
 A letter is accepted only when it's present in all the remaining words.
-It's most likely impossible to win with less than 8 lives.
+It's most likely impossible to win with less than 8 lives for a 5 letter word.
 You can try and start with "E-T-A-O-I-N", the most common English letters, to reduce the pool of candidate words fast.
 However, the fastest way to pass the test is probably to spam inputs and retry until you eventually win.
 
 Also, your helpful crow friend gives you a usefull hint... composed of random unicode characters.
 
 ## Adjusting difficulty
-- Two lists of words are provided: 4 or 5 letter words. Set the variable `wordLength` to 4 or 5 to choose one or the other. Counterintuitively, games using longer words should be easier since candidate words are more likely to be eliminated on each attempt.
+- The length of the secret word can be chosen by setting the variable `wordLength` between 4 and 9 (i.e. ranges that have enough candidate words in the provided word list). Games using longer words should be *easier* since candidate words are more likely to be eliminated on each attempt.
 - Number of starting lives can be adjusted with the `attempts` variable.
 - How many extra lives you get at each attempt can be adjusted with the `attemptMultiplierOnRetry` variable.
 
@@ -35,8 +35,8 @@ Change the `bDebug` variable to display/hide some debug information:
 - Correct and wrong letters entered in order
 
 ## Possible future improvements:
-- ✅ ~~Add feedback in the crow bubble about the letter being wrong or correct.~~
-- 🚧 Switching to use the Public Domain word list from [MichaelWehar](https://github.com/MichaelWehar/Public-Domain-Word-Lists/blob/master/5000-more-common.txt), it has a good number of 4+ letter words and seems SFW.
+- ✅ Add feedback in the crow bubble about the letter being wrong or correct.
+- ✅ Switching to use a Public Domain word list.
 - Add a random chance that a letter is accepted, to make the mechanics more confusing.
 - Redraw the background to have bigger speech bubble (or leave it like that because it's janky?)
 - Spawn flying beans that the user need to click for a "super" bonus. E.g.
@@ -47,11 +47,11 @@ Change the `bDebug` variable to display/hide some debug information:
 
 ## Credits
 - The crow image was edited from this [CC0 Public Domain photo](https://www.publicdomainpictures.net/en/view-image.php?image=300612) taken by [Circe Denyer](https://linktr.ee/circod).
-- Lists of words were taken from [copylists.com](https://copylists.com/words/). I suppose they are free to use but couldn't find a clear statement on the site. (NB: "green" is rightfully not on the [list of creative words](https://copylists.com/words/list-creative-words/))
+- The list of words is from [Michael Wehar](https://github.com/MichaelWehar/Public-Domain-Word-Lists/blob/master/5000-more-common.txt)and is **Public Domain**. It contains a list of 5000 common words including a good number of 4 to 9 letter words and it seems SFW (one word had a dash in it and was removed, though).
 
 
 
-**Original ReadMe below:**
+# Original ReadMe below:
 
 ---
 

@@ -89,13 +89,12 @@
 	<div id="lives"></div>
   </div>
 
-  <script type="text/javascript" src="4_letter_words.json"></script>
-  <script type="text/javascript" src="5_letter_words.json"></script>
+  <script type="text/javascript" src="5000-more-common.json"></script>
 
   <script type="text/javascript">
     (function(window, document){
 		/// You can adjust difficulty by modifying the values below:
-		let wordLength = 5; // only 4 or 5
+		let wordLength = 5; // Will be forced to be in the 4-9 range
 		let attempts = 4;
 		const attemptMultiplierOnRetry = 1.5;
 		/// Debug
@@ -107,12 +106,15 @@
 			}
 		}
 		///
-		let parsedWords = JSON.parse((wordLength === 5) ? words5 : words4);
+		wordLength = Math.min(Math.max(4, wordLength), 9);	// Best range to have enough candidate words is 4-9 letters
+		let parsedWords = JSON.parse(words5000);
 		let availableWords = [];
 		{
 			let parsedWordsFlat = [];
 			for (let w of parsedWords) {
-				parsedWordsFlat.push(w.word.toLowerCase());
+				if (w.word.length == wordLength) {
+					parsedWordsFlat.push(w.word.toLowerCase());
+				}
 			}
 			parsedWords = parsedWordsFlat;
 		}

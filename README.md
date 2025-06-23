@@ -7,7 +7,13 @@
 
 Try it before reading further, it's more fun if you don't know what's going on.
 
-## What is this? (SPOILERS!)
+## How to ~~play~~ pass the totally legit human test
+Try letters and guess the secret word!
+Entering letters can be done by using a keyboard or, if you're on a phone, by clicking the virtual keyboard (which is conveniently ordered in alphabetical order, as it should 😁).
+Wrong letters are displayed in cyan on the keyboard, correct ones appear violet, to shake up the classical red/green convention.
+Entering a wrong letter makes you lose a life. Lose all lives and it's game over. But don't feel bad, you can always try again. We'll even give you more lives, up to 26 to make sure you will eventually succeed and feel good about yourself.
+
+## What is going on? (SPOILERS!)
 
 This is like a Hangman game, except it's **very** unfair.
 The secret word is not chosen at the start. Instead, the game starts with a list of about 500 words and everytime you enter a letter, it tries and discards all words that contains your chosen letter.
@@ -17,12 +23,6 @@ You can try and start with "E-T-A-O-I-N", the most common English letters, to re
 However, the fastest way to pass the test is probably to spam inputs and retry until you eventually win.
 
 Also, your helpful crow friend gives you a usefull hint... composed of random unicode characters.
-
-## How to ~~play~~ pass the totally legit human test
-Try letters and guess the secret word!
-Entering letters can be done by using a keyboard or, if you're on a phone, by clicking the virtual keyboard (which is conveniently ordered in alphabetical order, as it should 😁).
-Wrong letters are displayed in cyan on the keyboard, correct ones appear violet, to shake up the classical red/green convention.
-Entering a wrong letter makes you lose a life. Lose all lives and it's game over. But don't feel bad, you can always try again. We'll even give you more lives, up to 26 to make sure you will eventually succeed and feel good about yourself.
 
 ## Adjusting difficulty
 - Two lists of words are provided: 4 or 5 letter words. Set the variable `wordLength` to 4 or 5 to choose one or the other. Counterintuitively, game using longer words should be easier since candidate words are more likely to be eliminated on each attempt.

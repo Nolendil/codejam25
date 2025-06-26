@@ -49,6 +49,7 @@ Change the `bDebug` variable to display/hide some debug information:
 ## Credits
 - The crow image was edited from this [CC0 Public Domain photo](https://www.publicdomainpictures.net/en/view-image.php?image=300612) taken by [Circe Denyer](https://linktr.ee/circod).
 - The list of words is from [Michael Wehar](https://github.com/MichaelWehar/Public-Domain-Word-Lists/blob/master/5000-more-common.txt)and is **Public Domain**. It contains a list of 5000 common words including a good number of 4 to 9 letter words and it seems SFW (one word had a dash in it and was removed, though).
+- The bean was edited from this [CC0 Public Domain photo](https://www.publicdomainpictures.net/en/view-image.php?image=350031&picture=close-up-red-beans-background) by [icon0 com](https://www.icon0.com/).
 
 ---
 

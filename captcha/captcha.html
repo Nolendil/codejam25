@@ -15,11 +15,21 @@
     }
 
     #captcha-container {
-      background: white;
-	  background-image: url("bg.png");
       width: 390px;
       height: 300px;
     }
+
+	.bgnormal {
+		background-image: url("bg0.png");
+	}
+	
+	.bgwin {
+		background-image: url("bg1.png");
+	}
+	
+	.bgpowerup {
+		background-image: url("bg2.png");
+	}
 
 	.hidden {
 		display: none;
@@ -45,9 +55,9 @@
 
 	#hint {
 		position: absolute;
-		top: 95px;
-		left: 10px;
-		width: 165px;
+		top: 105px;
+		left: 5px;
+		width: 210px;
 		text-align: center;
 	}
 
@@ -56,6 +66,7 @@
 		top: 200px;
 		left: 45px;
 		width: 300px;
+		/*height: 45px;*/
 		text-align: center;
 	}
 
@@ -74,12 +85,12 @@
 </head>
 
 <body>
-  <div id="captcha-container">
-    <div id="title">Find the <span id="word-length"></span> letter word...</div>
+  <div id="captcha-container" class="bgnormal">
 	<div class="debug" style="background-color: gray; width: fit-content;">Possible words: <span id="possible-words"></span></div>
 	<div class="debug" style="background-color: gray; width: fit-content;">Wrong: <span id="wrong"></span></div>
 	<div class="debug" style="background-color: gray; width: fit-content;">Correct: <span id="correct"></span></div>
 	<div id="hint">
+		<div id="title">Find the <span id="word-length"></span> letter word...</div>
 		<div id="message-text"></div>
 		<div id="hint-text"></div>
 		<button id="try-again" class="hidden">Try again!</button>
@@ -97,8 +108,9 @@
 		let wordLength = 5; // Will be forced to be in the 4-9 range
 		let attempts = 4;
 		const attemptMultiplierOnRetry = 1.5;
+		const chanceToAcceptLetter = 0.25;
 		/// Debug
-		const bDebug = false;	//true;
+		const bDebug = false;
 		if (bDebug) {
 			let debugElements = document.getElementsByClassName("debug");
 			while(debugElements.length > 0) {
@@ -120,6 +132,7 @@
 		}
 		let wrongLetters = [];
 		let correctLetters = [];
+		const captchaContainerElement = document.getElementById("captcha-container");
 		const wordLengthElement = document.getElementById("word-length");
 		const wordCountElement = document.getElementById("possible-words");
 		const hintElement = document.getElementById("hint-text");
@@ -154,6 +167,10 @@
 			if (bRetry) {
 				attempts = Math.min(Math.floor(attempts * attemptMultiplierOnRetry), 26);
 			}
+			// Background to normal
+			captchaContainerElement.classList.remove("bgwin", "bgpowerup");
+			captchaContainerElement.classList.add("bgnormal");
+			//
 			tryAgainButton.classList.add("hidden");
 			winButton.classList.add("hidden");
 			for (let keyElement of vkbElement.children) {
@@ -201,38 +218,31 @@
 				return;
 			}
 
-			// Eliminate words that contains that letter if possible
-			let newAvailableWords = [];
-			for (let w of availableWords) {
-				if (!w.includes(key))
-				{
-					newAvailableWords.push(w);
-				}
-			}
-			if (newAvailableWords.length > 0) {
-				wrongLetters.push(key);
-				document.getElementById("vkey" + key).classList.add("wrong");
-				messageElement.innerHTML = key.toUpperCase() + " was <span class='wrong'>WRONG</span>!";
-				availableWords = newAvailableWords;
+			if (isLucky(key)) {
+				acceptLetter(key);
 			} else {
-				// We have to accept the letter
-				correctLetters.push(key);
-				document.getElementById("vkey" + key).classList.add("correct");
-				messageElement.innerHTML = key.toUpperCase() + " was <span class='correct'>CORRECT</span>!";
-				// Remove words that don't contain that letter
-				newAvailableWords = [];
+				// Eliminate words that contains that letter if possible
+				let newAvailableWords = [];
 				for (let w of availableWords) {
-					if (w.includes(key)) {
+					if (!w.includes(key))
+					{
 						newAvailableWords.push(w);
 					}
 				}
+				// Check if it worked. If so, mark that letter as wrong.
 				if (newAvailableWords.length > 0) {
+					wrongLetters.push(key);
+					document.getElementById("vkey" + key).classList.add("wrong");
+					messageElement.innerHTML = key.toUpperCase() + " was <span class='wrong'>WRONG</span>!";
 					availableWords = newAvailableWords;
 				} else {
-					// Oops, this shouldn't happen, right? If it does, free success!
-					console.log("Secret ending, congrats!");
-					win();
-					return;
+					// We couldn't discard the letter, we HAVE to accept it
+					if (!acceptLetter(key)) {
+						// Oops, it failed. This shouldn't happen but, if it does, free success!
+						console.log("Secret ending, congrats!");
+						win();
+						return;
+					}
 				}
 			}
 			
@@ -261,11 +271,56 @@
 
 			update();
 		}
+		
+		function isLucky(_key) {
+			// No random luck on final letter
+			let currentLetter = correctLetters.length + 1;
+			if (currentLetter >= wordLength) {
+				return false;
+			}
+			// Check luck
+			if (Math.random() >= (chanceToAcceptLetter / currentLetter)) {
+				return false;
+			}
+			// Check if it's possible
+			for (let w of availableWords) {
+				if (w.includes(_key)) {
+					return true;
+				}
+			}
+			// Impossible to accept
+			return false;
+		}
+
+		function acceptLetter(_key) {
+			// We have to accept the letter
+			correctLetters.push(_key);
+			document.getElementById("vkey" + _key).classList.add("correct");
+			messageElement.innerHTML = _key.toUpperCase() + " was <span class='correct'>CORRECT</span>!";
+			// Remove words that don't contain that letter
+			newAvailableWords = [];
+			for (let w of availableWords) {
+				if (w.includes(_key)) {
+					newAvailableWords.push(w);
+				}
+			}
+			if (newAvailableWords.length > 0) {
+				availableWords = newAvailableWords;
+				return true;
+			}
+
+			// Something went wrong
+			return false;
+		}
 
 		function win() {
 			update();
 			hintElement.innerHTML = "SUCCESS!<br>The word was: " + availableWords[0];
 			winButton.classList.remove("hidden");
+			// Background to win
+			captchaContainerElement.classList.remove("bgnormal", "bgpowerup");
+			captchaContainerElement.classList.add("bgwin");
+			//
 		}
 
 		function lose() {

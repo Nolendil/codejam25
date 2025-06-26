@@ -12,23 +12,28 @@ Try letters and guess the secret word!
 Entering letters can be done by using a keyboard or, if you're on a phone, by clicking the virtual keyboard (which is conveniently ordered in alphabetical order, as it should 😁).
 Wrong letters are displayed in green on the keyboard, correct ones appear red, to shake up the traditional conventions.
 Entering a wrong letter makes you lose a life. Lose all lives and it's game over. But don't feel bad, you can always try again. We'll even give you more lives, up to 26 to make sure you will eventually succeed and feel good about yourself.
+Make sure to check the hint given by your helpful crow friend and keep an eye out in case a magic bean comes to your help!
 
 ## What is going on? (SPOILERS!)
 
 This is like a Hangman game, except it's **very** unfair.
-The secret word is not chosen at the start. Instead, the game starts with a list of about 500 words and everytime you enter a letter, it tries and discards all words that contains your chosen letter.
-A letter is accepted either if it's present in all the remaining words, or it might happen randomly.
+The secret word is not chosen at the start. Instead, the game starts with a list of about 500 words and every time you enter a letter, it tries and discards all words that contains your chosen letter.
+A letter is accepted either if it's present in *all* the remaining words, or with some random chance so the mechanics are less obvious.
 It's most likely impossible to win with less than 8 lives for a 5 letter word.
 You can try and start with "E-T-A-O-I-N", the most common English letters, to reduce the pool of candidate words fast.
 However, the fastest way to pass the test is probably to spam inputs and retry until you eventually win.
 
-Also, your helpful crow friend gives you a usefull hint... composed of random unicode characters.
+Otherwise, the hint is composed of completely random unicode characters. It's only here to confuse the user.
+Clicking the bean just changes the crow image, no real effect at the moment (see "Possible future improvements").
 
 ## Adjusting difficulty
+Several parameters could be set up by the server to adjust the difficulty when selecting this captcha. Such a system would need to be added, though.
+As is, it is only possible by editing the code. All relevant variables are available at the top of the main function.
 - The length of the secret word can be chosen by setting the variable `wordLength` between 4 and 9 (i.e. ranges that have enough candidate words in the provided word list). Games using longer words should be *easier* since candidate words are more likely to be eliminated on each attempt.
 - Number of starting lives can be adjusted with the `attempts` variable.
 - How many extra lives you get at each attempt can be adjusted with the `attemptMultiplierOnRetry` variable.
-- `chanceToAcceptLetter` allows accepting entered letters randomly to mix things up. It should be in a 0.0-1.0 range. The chance is divided by the rank of the current letter (i.e. if we set the chance to 0.3, the first letter has 30% of being accepted, the second has 15%, the third has 10%, etc). The final letter and impossible letters never get accepted by luck. A value too high might make the challenge trivial but an average one should make the mechanics more confusing.
+- `chanceToAcceptLetter` adjusts the chance of randomly accepting entered letters. It should be in a 0.0-1.0 range. The chance is divided by the rank of the current letter (i.e. if we set the chance to 0.3, the first letter has 30% of being accepted, the second has 15%, the third has 10%, etc). The final letter and impossible letters never get accepted by luck. A value too high might make the challenge trivial but an average one should make it more confusing.
+- `chanceOfBean` and `beanDurationMs` have **no** effect on difficulty at the moment, beans are just a distraction. In future updates, the bean might do something to make the game easier or harder (see "Possible future improvements"). Set `chanceOfBean` to 0 to disable beans.
 
 ## Debugging
 Change the `bDebug` variable to display/hide some debug information:
@@ -39,16 +44,19 @@ Change the `bDebug` variable to display/hide some debug information:
 - ✅ Add feedback in the crow bubble about the letter being wrong or correct.
 - ✅ Switching to use a Public Domain word list.
 - ✅ Add a random chance that a letter is accepted, to make the mechanics more confusing.
-- 🚧 Redraw the background to fit all the texts in the speech bubble
-- Spawn flying beans that the user need to click for a "super" bonus. E.g.
-  - do nothing
-  - give an extra life
-  - make the crow eyes glow
-  - increase chances of accepting a letter...
+- ✅ Redraw the background to fit all the texts in the speech bubble
+- 🚧 Spawn flying beans that the user need to click for a "super" bonus. E.g.
+  - ✅ Do nothing
+  - ✅ Make the crow eyes glow
+  - Give an extra life
+  - Increase chances of accepting a letter
+  - Mix up some keys on the virtual keyboard
+  - Pick a wrong letter randomly...
 
 ## Credits
 - The crow image was edited from this [CC0 Public Domain photo](https://www.publicdomainpictures.net/en/view-image.php?image=300612) taken by [Circe Denyer](https://linktr.ee/circod).
 - The list of words is from [Michael Wehar](https://github.com/MichaelWehar/Public-Domain-Word-Lists/blob/master/5000-more-common.txt)and is **Public Domain**. It contains a list of 5000 common words including a good number of 4 to 9 letter words and it seems SFW (one word had a dash in it and was removed, though).
+- The bean was edited from this [CC0 Public Domain photo](https://www.publicdomainpictures.net/en/view-image.php?image=350031&picture=close-up-red-beans-background) by [icon0 com](https://www.icon0.com/).
 
 ---
 

@@ -94,8 +94,8 @@
 		<div id="message-text"></div>
 		<div id="hint-text"></div>
 		<button id="try-again" class="hidden">Try again!</button>
-		<button id="win" class="hidden">You're a human!</button>
 	</div>
+	<div id="bean" class="hidden"><img src="red-bean.png"></div>
 	<div id="vkeyboard"></div>
 	<div id="lives"></div>
   </div>
@@ -108,7 +108,8 @@
 		let wordLength = 5; // Will be forced to be in the 4-9 range
 		let attempts = 4;
 		const attemptMultiplierOnRetry = 1.5;
-		const chanceToAcceptLetter = 0.25;
+		const chanceToAcceptLetter = 0.20;
+		const chanceOfBean = 0.1;
 		/// Debug
 		const bDebug = false;
 		if (bDebug) {
@@ -142,9 +143,7 @@
 		const livesElement = document.getElementById("lives");
 		const vkbElement = document.getElementById("vkeyboard");
 		const tryAgainButton = document.getElementById("try-again");
-		const winButton = document.getElementById("win");
 		tryAgainButton.addEventListener('click', () => reset(true));
-		winButton.addEventListener('click', () => captchaSuccess());
 		window.onkeyup = onKey;
 		drawVKeyboard();
 		reset(false);
@@ -167,12 +166,16 @@
 			if (bRetry) {
 				attempts = Math.min(Math.floor(attempts * attemptMultiplierOnRetry), 26);
 			}
-			// Background to normal
+			// Change background to normal
 			captchaContainerElement.classList.remove("bgwin", "bgpowerup");
 			captchaContainerElement.classList.add("bgnormal");
 			//
 			tryAgainButton.classList.add("hidden");
-			winButton.classList.add("hidden");
+			let winButton = document.getElementById("win");
+			if (winButton) {
+				winButton.remove();
+			}
+			//
 			for (let keyElement of vkbElement.children) {
 				keyElement.classList.remove("wrong", "correct");
 			}
@@ -316,8 +319,13 @@
 		function win() {
 			update();
 			hintElement.innerHTML = "SUCCESS!<br>The word was: " + availableWords[0];
-			winButton.classList.remove("hidden");
-			// Background to win
+			// Create Win button: <button id="win">You're a human!</button>
+			let winButton = document.createElement("button");
+			winButton.textContent = "You're a human!";
+			winButton.id = "win";
+			hintElement.appendChild(winButton);
+			winButton.addEventListener('click', () => captchaSuccess());
+			// Change background to win
 			captchaContainerElement.classList.remove("bgnormal", "bgpowerup");
 			captchaContainerElement.classList.add("bgwin");
 			//

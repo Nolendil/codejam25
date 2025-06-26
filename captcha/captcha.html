@@ -81,23 +81,31 @@
 	.vkey {
 		min-width: 24px;
 	}
+
+	@keyframes fadeInOutAnimation {
+		0%,100% { opacity: 0 }
+		50% { opacity: 1 }
+	}
   </style>
 </head>
 
 <body>
-  <div id="captcha-container" class="bgnormal">
-	<div class="debug" style="background-color: gray; width: fit-content;">Possible words: <span id="possible-words"></span></div>
-	<div class="debug" style="background-color: gray; width: fit-content;">Wrong: <span id="wrong"></span></div>
-	<div class="debug" style="background-color: gray; width: fit-content;">Correct: <span id="correct"></span></div>
-	<div id="hint">
-		<div id="title">Find the <span id="word-length"></span> letter word...</div>
-		<div id="message-text"></div>
-		<div id="hint-text"></div>
-		<button id="try-again" class="hidden">Try again!</button>
-	</div>
-	<div id="bean" class="hidden"><img src="red-bean.png"></div>
-	<div id="vkeyboard"></div>
-	<div id="lives"></div>
+	<link rel="preload" href="bg0.png" as="image">
+	<link rel="preload" href="bg1.png" as="image">
+	<link rel="preload" href="bg2.png" as="image">
+	<link rel="preload" href="red-bean.png" as="image">
+	<div id="captcha-container" class="bgnormal">
+		<div class="debug" style="background-color: gray; width: fit-content;">Possible words: <span id="possible-words"></span></div>
+		<div class="debug" style="background-color: gray; width: fit-content;">Wrong: <span id="wrong"></span></div>
+		<div class="debug" style="background-color: gray; width: fit-content;">Correct: <span id="correct"></span></div>
+		<div id="hint">
+			<div id="title">Find the <span id="word-length"></span> letter word...</div>
+			<div id="message-text"></div>
+			<div id="hint-text"></div>
+			<button id="try-again" class="hidden">Try again!</button>
+		</div>
+		<div id="vkeyboard"></div>
+		<div id="lives"></div>
   </div>
 
   <script type="text/javascript" src="5000-more-common.json"></script>
@@ -109,7 +117,8 @@
 		let attempts = 4;
 		const attemptMultiplierOnRetry = 1.5;
 		const chanceToAcceptLetter = 0.20;
-		const chanceOfBean = 0.1;
+		const chanceOfBean = 0.05;
+		const beanDurationMs = 4000;
 		/// Debug
 		const bDebug = false;
 		if (bDebug) {
@@ -144,6 +153,7 @@
 		const vkbElement = document.getElementById("vkeyboard");
 		const tryAgainButton = document.getElementById("try-again");
 		tryAgainButton.addEventListener('click', () => reset(true));
+		let beanElement = null;
 		window.onkeyup = onKey;
 		drawVKeyboard();
 		reset(false);
@@ -166,10 +176,6 @@
 			if (bRetry) {
 				attempts = Math.min(Math.floor(attempts * attemptMultiplierOnRetry), 26);
 			}
-			// Change background to normal
-			captchaContainerElement.classList.remove("bgwin", "bgpowerup");
-			captchaContainerElement.classList.add("bgnormal");
-			//
 			tryAgainButton.classList.add("hidden");
 			let winButton = document.getElementById("win");
 			if (winButton) {
@@ -194,6 +200,10 @@
 		}
 		
 		function update() {
+			// Change background to normal
+			captchaContainerElement.classList.add("bgnormal");
+			captchaContainerElement.classList.remove("bgwin", "bgpowerup");
+			//
 			wordCountElement.textContent = availableWords.length + (availableWords.length <= 10 ? (" [" + availableWords + "]") : "");
 			wrongElement.textContent = "(" + wrongLetters.length + "/" + attempts + ") " + wrongLetters;
 			correctElement.textContent = "(" + correctLetters.length + "/" + wordLength + ") " + correctLetters;
@@ -273,6 +283,10 @@
 			}
 
 			update();
+			// Bean?
+			if (Math.random() < chanceOfBean) {
+				spawnBean(beanDurationMs);
+			}
 		}
 		
 		function isLucky(_key) {
@@ -316,7 +330,41 @@
 			return false;
 		}
 
+		function spawnBean(_millis) {
+			// Spawn only one at a time
+			if (beanElement != null)
+				return;
+
+			beanElement = document.createElement("img");
+			beanElement.src = "red-bean.png";
+			beanElement.addEventListener('click', () => beanClicked());
+			// Fade in out
+			beanElement.style.opacity = 0;
+			beanElement.style.animation = "fadeInOutAnimation " + _millis + "ms ease-in-out";
+			// Spawn
+			captchaContainerElement.appendChild(beanElement);
+			// Remove when done
+			setTimeout(function () { removeBean(); }, _millis);
+		}
+
+		function removeBean() {
+			if (beanElement) {
+				beanElement.remove();
+				beanElement = null;
+			}
+		}
+
+		function beanClicked() {
+			removeBean();
+			// Change background to Power Up!!!
+			captchaContainerElement.classList.add("bgpowerup");
+			captchaContainerElement.classList.remove("bgnormal", "bgwin");
+			
+			// TODO: Actual bean effects
+		}
+
 		function win() {
+			removeBean();
 			update();
 			hintElement.innerHTML = "SUCCESS!<br>The word was: " + availableWords[0];
 			// Create Win button: <button id="win">You're a human!</button>
@@ -326,12 +374,13 @@
 			hintElement.appendChild(winButton);
 			winButton.addEventListener('click', () => captchaSuccess());
 			// Change background to win
-			captchaContainerElement.classList.remove("bgnormal", "bgpowerup");
 			captchaContainerElement.classList.add("bgwin");
+			captchaContainerElement.classList.remove("bgnormal", "bgpowerup");
 			//
 		}
 
 		function lose() {
+			removeBean();			
 			update();
 			hintElement.innerHTML = "YOU LOST!<br>The word was: " + availableWords[Math.floor(Math.random() * availableWords.length)];
 			tryAgainButton.classList.remove("hidden");

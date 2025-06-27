@@ -30,8 +30,7 @@ Clicking the bean just changes the crow image, no real effect at the moment (see
 Several parameters could be set up by the server to adjust the difficulty when selecting this captcha. Such a system would need to be added, though.
 As is, it is only possible by editing the code. All relevant variables are available at the top of the main function.
 - The length of the secret word can be chosen by setting the variable `wordLength` between 4 and 9 (i.e. ranges that have enough candidate words in the provided word list). Games using longer words should be *easier* since candidate words are more likely to be eliminated on each attempt.
-- Number of starting lives can be adjusted with the `attempts` variable.
-- How many extra lives you get at each attempt can be adjusted with the `attemptMultiplierOnRetry` variable.
+- Number of starting lives can be adjusted with the `attempts` variable. How many extra lives you get at each attempt can be adjusted with the `attemptMultiplierOnRetry` variable.
 - `chanceToAcceptLetter` adjusts the chance of randomly accepting entered letters. It should be in a 0.0-1.0 range. The chance is divided by the rank of the current letter (i.e. if we set the chance to 0.3, the first letter has 30% of being accepted, the second has 15%, the third has 10%, etc). The final letter and impossible letters never get accepted by luck. A value too high might make the challenge trivial but an average one should make it more confusing.
 - `chanceOfBean` and `beanDurationMs` have **no** effect on difficulty at the moment, beans are just a distraction. In future updates, the bean might do something to make the game easier or harder (see "Possible future improvements"). Set `chanceOfBean` to 0 to disable beans.
 
@@ -54,8 +53,8 @@ Change the `bDebug` variable to display/hide some debug information:
   - Pick a wrong letter randomly...
 
 ## Credits
+- The list of words is from [Michael Wehar](https://github.com/MichaelWehar/Public-Domain-Word-Lists/blob/master/5000-more-common.txt) and is **Public Domain**. It contains a list of 5000 common words including a good number of 4 to 9 letter words and it seems SFW (one word had a dash in it and was removed, though).
 - The crow image was edited from this [CC0 Public Domain photo](https://www.publicdomainpictures.net/en/view-image.php?image=300612) taken by [Circe Denyer](https://linktr.ee/circod).
-- The list of words is from [Michael Wehar](https://github.com/MichaelWehar/Public-Domain-Word-Lists/blob/master/5000-more-common.txt)and is **Public Domain**. It contains a list of 5000 common words including a good number of 4 to 9 letter words and it seems SFW (one word had a dash in it and was removed, though).
 - The bean was edited from this [CC0 Public Domain photo](https://www.publicdomainpictures.net/en/view-image.php?image=350031&picture=close-up-red-beans-background) by [icon0 com](https://www.icon0.com/).
 
 ---

@@ -366,7 +366,8 @@
 		function win() {
 			removeBean();
 			update();
-			hintElement.innerHTML = "SUCCESS!<br>The word was: " + availableWords[0];
+			hintElement.innerHTML = "";
+			messageElement.innerHTML = "SUCCESS!<br>The word was: " + availableWords[0];
 			// Create Win button: <button id="win">You're a human!</button>
 			let winButton = document.createElement("button");
 			winButton.textContent = "You're a human!";
@@ -382,7 +383,8 @@
 		function lose() {
 			removeBean();			
 			update();
-			hintElement.innerHTML = "YOU LOST!<br>The word was: " + availableWords[Math.floor(Math.random() * availableWords.length)];
+			hintElement.innerHTML = "";
+			messageElement.innerHTML = "YOU LOST!<br>The word was: " + availableWords[Math.floor(Math.random() * availableWords.length)];
 			tryAgainButton.classList.remove("hidden");
 		}
 	
